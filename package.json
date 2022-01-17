@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack-example": "webpack --config EXAMPLE/webpack.config.js ",
-    "run" : "start bash -c \"node EXAMPLE/server.js\""
+    "run-example" : "start bash -c \"node EXAMPLE/server.js\""
   },
   "repository": {
     "type": "git",
