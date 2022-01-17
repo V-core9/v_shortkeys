@@ -1,0 +1,26 @@
+{
+  "name": "v_shortkeys",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/V-core9/v_shortkeys.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/V-core9/v_shortkeys/issues"
+  },
+  "homepage": "https://github.com/V-core9/v_shortkeys#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "node-sass": "^7.0.1",
+    "webpack": "^5.66.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
