@@ -1,6 +1,6 @@
 {
   "name": "v_shortkeys",
-  "version": "1.0.0",
+  "version": "0.0.01",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,14 +12,22 @@
     "type": "git",
     "url": "git+https://github.com/V-core9/v_shortkeys.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "shortKeys",
+    "shortcut",
+    "shortcut-key",
+    "keyboard-shortcut",
+    "keyboard",
+    "keypress",
+    "v-core9"
+  ],
+  "author": "V-core9",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/V-core9/v_shortkeys/issues"
   },
   "homepage": "https://github.com/V-core9/v_shortkeys#readme",
-  "dependencies": {
+  "dev-dependencies": {
     "express": "^4.17.2",
     "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1"
