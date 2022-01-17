@@ -1,5 +1,3 @@
-const vskInit = require('../../index');
-
 const { closeWindowFunc, fullScreen, toggleRootModal, messageConsoleDemo, clearConsole } = require('./helpers');
 
 var demoShortKeys = [
@@ -53,6 +51,7 @@ var demoShortKeys = [
     }
 ];
 
+const vskInit = require('../../index');
 vskInit(demoShortKeys);
 
 var stringShortKeys = '<h4>Shortcodes:</h4>';
@@ -67,5 +66,4 @@ for(let i = 0; i < demoShortKeys.length; i++) {
                         </div>
                         `;
 }
-
 document.querySelector('.docs').innerHTML = stringShortKeys;
