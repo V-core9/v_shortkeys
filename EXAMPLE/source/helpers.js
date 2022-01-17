@@ -73,13 +73,18 @@ const toggleRootModal = async () => {
   }
 };
 
-const messageConsoleDemo = async () => { 
-  console.log('PRESSED MESSAGE SHORTKEYS @' + Date.now()); 
+const messageConsoleDemo = async () => {
+  console.log('PRESSED MESSAGE SHORTKEYS @' + Date.now());
+};
+
+const clearConsole = async () => {
+  console.clear();
 };
 
 module.exports = {
   closeWindowFunc,
   fullScreen,
   toggleRootModal,
-  messageConsoleDemo
+  messageConsoleDemo,
+  clearConsole
 };

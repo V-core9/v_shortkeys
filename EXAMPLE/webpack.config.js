@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        game: './source/vShortKeys.js',
+        game: path.join(__dirname, 'source/vShortKeys.js'),
     },
     mode: "development",
     target: 'web',
