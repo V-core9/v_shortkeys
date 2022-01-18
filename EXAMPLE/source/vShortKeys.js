@@ -5,7 +5,7 @@ var demoShortKeys = [
         name: "console.log",
         description: "This will send console log message.",
         buttons: [81, 87, 69],
-        delay: 50,
+        delay: 0,
         date: 0,
         triggered: false,
         exec: messageConsoleDemo
@@ -51,8 +51,8 @@ var demoShortKeys = [
     }
 ];
 
-const vskInit = require('../../index');
-vskInit(demoShortKeys);
+const vShortKeys = require('../../index');
+vShortKeys.init(demoShortKeys);
 
 var stringShortKeys = '<h4>Shortcodes:</h4>';
 
