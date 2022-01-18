@@ -1,10 +1,19 @@
 var currentKeyPress = [];
+var scInterval = 10;
+var shortCutsInterval = null;
+var scArray = [];
 
-var scConfig = {
-    interval: 10
+const appBlur = async () => {
+    console.log('appBlur');
+    clearInterval(shortCutsInterval);
+    shortCutsInterval = null;
+    currentKeyPress = [];
 };
 
-var scArray = [];
+const appFocus = async () => {
+    console.log('appFocus');
+    shortCutsInterval = setInterval(shortCutFunction, scInterval);
+};
 
 const keyDownFunc = async (event) => {
     var key = event.keyCode;
@@ -54,10 +63,12 @@ const shortCutFunction = () => {
 const vskInit = (shortKeys) => {
     scArray = shortKeys;
 
-    var shortCutsInterval = setInterval(shortCutFunction, scConfig.interval);
+    window.addEventListener("keydown", keyDownFunc);
+    window.addEventListener("keyup", keyUpFunc);
+    window.addEventListener('blur', appBlur);
+    window.addEventListener('focus', appFocus);
 
-    document.addEventListener("keydown", keyDownFunc);
-    document.addEventListener("keyup", keyUpFunc);
+    shortCutsInterval = setInterval(shortCutFunction, scInterval);
 };
 
 module.exports = vskInit;
