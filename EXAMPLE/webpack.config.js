@@ -3,13 +3,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        version_1: path.join(__dirname, 'source/vShortKeys.js'),
-        version_2: path.join(__dirname, 'source/vShortKeys.V2.js'),
+        vShortKeys: path.join(__dirname, 'source/appExample.js'),
     },
     mode: "development",
     target: 'web',
     output: {
-        filename: `[name]-vShortKeys.js`,
+        filename: `[name].js`,
         path: path.resolve(__dirname, `public/scripts`),
     },
 };

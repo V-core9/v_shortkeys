@@ -1,77 +1,159 @@
-const vShortKeys = {
-    currentPresses: [],
-    scInterval: (1000 / 60),
-    intObject: null,
-    scArray: [],
+function vShortKeyItem(name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) {
+    this.name = name;
+    this.description = description;
+    this.buttons = buttons;
+    this.exec = exec;
+    this.autoTrigger = autoTrigger;
+    this.coolDown = coolDown;
+    this.date = Date.now();
+    this.triggered = false;
+    this.disabled = false;
+}
 
-    stop: async () => {
-        clearInterval(vShortKeys.intObject);
-        vShortKeys.intObject = null;
-        vShortKeys.currentPresses = [];
-    },
+module.exports = function vShortKeys(data = {}) {
+    this.debug = false;
+    this.shortKeys = data.shortKeys || [];
+    this.currentPresses = [];
+    this.intervalObject = null;
 
-    start: async () => {
-        vShortKeys.intObject = setInterval(vShortKeys.loop, vShortKeys.scInterval);
-    },
+    this.options = {
+        loopInterval: (1000 / 60), // loop interval in milliseconds
+    };
 
-    keyDown: async (event) => {
-        var key = event.keyCode;
-        if (!vShortKeys.currentPresses.includes(key)) {
-            vShortKeys.currentPresses.push(key);
-        }
-    },
 
-    keyUp: async (event) => {
-        var key = event.keyCode;
-        var index = vShortKeys.currentPresses.indexOf(key);
-        if (index > -1) {
-            vShortKeys.currentPresses.splice(index, 1);
-        }
-    },
+    //? Start and stop methods.
+    this.start = () => {
+        this.intervalObject = setInterval(this.loop, this.options.loopInterval);
+    };
 
-    loop: async () => {
-        console.time('shortCutFunction');
-        if (vShortKeys.currentPresses.length > 0) {
-            console.log(vShortKeys.currentPresses);
+    this.stop = () => {
+        clearInterval(this.intervalObject);
+        this.intervalObject = null;
+        this.currentPresses = [];
+    };
+
+
+    //? Main Looping Function
+    this.loop = () => {
+        //console.time('shortCutFunction');
+        if (this.currentPresses.length > 0) {
+            console.log(this.currentPresses);
             var i, j;
-            for (i = 0; i < vShortKeys.scArray.length; i++) {
-                if (vShortKeys.scArray[i].disabled !== true) {
-                    var btnNum = vShortKeys.scArray[i].buttons.length;
-                    for (j = 0; j < vShortKeys.scArray[i].buttons.length; j++) {
-                        if (vShortKeys.currentPresses.indexOf(vShortKeys.scArray[i].buttons[j]) > -1) {
+            for (i = 0; i < this.shortKeys.length; i++) {
+                if (this.shortKeys[i].disabled !== true) {
+                    var btnNum = this.shortKeys[i].buttons.length;
+                    for (j = 0; j < this.shortKeys[i].buttons.length; j++) {
+                        if (this.currentPresses.indexOf(this.shortKeys[i].buttons[j]) > -1) {
                             btnNum--;
                         }
                     }
                     if (btnNum == 0) {
-                        if ((vShortKeys.scArray[i].triggered == false) || ((Date.now() - vShortKeys.scArray[i].date) > vShortKeys.scArray[i].delay)) {
-                            vShortKeys.scArray[i].exec();
-                            vShortKeys.scArray[i].date = Date.now();
-                            vShortKeys.scArray[i].triggered = true;
+                        var timeDelta = Date.now() - this.shortKeys[i].date;
+                        if (((this.shortKeys[i].triggered == false) || (timeDelta > this.shortKeys[i].autoTrigger)) && (timeDelta > this.shortKeys[i].coolDown)) {
+                            this.shortKeys[i].exec();
+                            this.shortKeys[i].date = Date.now();
+                            this.shortKeys[i].triggered = true;
+                            console.warn(`Triggered : ${this.shortKeys[i].name}`);
                         }
                     } else {
-                        if (vShortKeys.scArray[i].triggered) {
-                            vShortKeys.scArray[i].triggered = false;
+                        if (this.shortKeys[i].triggered) {
+                            this.shortKeys[i].triggered = false;
+                            console.warn(`UN-Triggered : ${this.shortKeys[i].name}`);
                         }
                     }
                 }
             }
         }
-        console.timeEnd('shortCutFunction');
-    },
+        //console.timeEnd('shortCutFunction');
+    };
 
-    init: async (shortKeys) => {
-        vShortKeys.scArray = shortKeys;
 
-        window.addEventListener("keydown", vShortKeys.keyDown);
-        window.addEventListener("keyup", vShortKeys.keyUp);
-        window.addEventListener('blur', vShortKeys.stop);
-        window.addEventListener('focus', vShortKeys.start);
+    //? Enable/Disable Shortcut
+    this.enableShortcut = (name) => {
+        for (var i = 0; i < this.shortKeys.length; i++) {
+            if (this.shortKeys[i].name == name) {
+                this.shortKeys[i].disabled = false;
+                console.log(`🟢 Shortcut Enabled : ${name}`);
+            }
+        }
+    };
 
-        vShortKeys.start();
-    }
+    this.disableShortcut = (name) => {
+        for (var i = 0; i < this.shortKeys.length; i++) {
+            if (this.shortKeys[i].name == name) {
+                this.shortKeys[i].disabled = true;
+                console.log(`🚫 Shortcut Disabled : ${name}`);
+            }
+        }
+    };
 
+    this.registerShortcut = (name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) => {
+        var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
+        this.shortKeys.push(newItem);
+        console.log(`📃 Shortcut Registered : ${name}`);
+    };
+
+
+    //? Event Handlers [ KeyDown, KeyUp ]
+    this.keyDown = (event) => {
+        var key = event.keyCode;
+        if (!this.currentPresses.includes(key)) {
+            this.currentPresses.push(key);
+        }
+    };
+
+    this.keyUp = (ev) => {
+        var key = ev.keyCode;
+        var index = this.currentPresses.indexOf(key);
+        if (index > -1) {
+            this.currentPresses.splice(index, 1);
+        }
+    };
+
+
+    //* Setting up options
+    this.setLoopInterval = (interval) => {
+        try {
+            console.info(`Setting LoopInterval Value to ${interval}`);
+            this.options.loopInterval = interval;
+            return this;
+        } catch (e) {
+            return e;
+        }
+    };
+
+    this.setDebug = (debug) => {
+        try {
+            console.info(`Setting Debug Value to ${debug}`);
+            if (typeof debug === 'boolean') {
+                this.debug = debug;
+            } else {
+                throw new Error('Debug Value must be a boolean');
+            }
+            return this;
+        } catch (e) {
+            return e;
+        }
+    };
+
+    this.setOptions = (options) => {
+        console.info(`📐 Setting Options`);
+        if (options.loopInterval !== undefined) this.setLoopInterval(options.loopInterval);
+        if (options.debug !== undefined) this.setDebug(options.debug);
+    };
+
+
+    this.setEventListeners = () => {
+        window.addEventListener("keydown", this.keyDown);
+        window.addEventListener("keyup", this.keyUp);
+        window.addEventListener('blur', this.stop);
+        window.addEventListener('focus', this.start);
+        return this;
+    };
+
+    if (data.options !== undefined) this.setOptions(data.options);
+
+    this.setEventListeners();
+    this.start();
 };
 
-
-
-module.exports = vShortKeys;
