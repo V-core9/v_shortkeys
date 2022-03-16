@@ -1,34 +1,35 @@
 const vShortKeys = {
     currentPresses: [],
-    scInterval: 1,
+    scInterval: (1000 / 60),
     intObject: null,
     scArray: [],
 
-    stop : async () => {
+    stop: async () => {
         clearInterval(vShortKeys.intObject);
         vShortKeys.intObject = null;
         vShortKeys.currentPresses = [];
     },
-    
-    start : async () => {
+
+    start: async () => {
         vShortKeys.intObject = setInterval(vShortKeys.loop, vShortKeys.scInterval);
     },
-    
-    keyDown : async (event) => {
+
+    keyDown: async (event) => {
         var key = event.keyCode;
         if (!vShortKeys.currentPresses.includes(key)) {
             vShortKeys.currentPresses.push(key);
         }
     },
-    
-    keyUp : async (event) => {
+
+    keyUp: async (event) => {
         var key = event.keyCode;
         var index = vShortKeys.currentPresses.indexOf(key);
         if (index > -1) {
             vShortKeys.currentPresses.splice(index, 1);
         }
     },
-    loop : async () => {
+
+    loop: async () => {
         console.time('shortCutFunction');
         if (vShortKeys.currentPresses.length > 0) {
             console.log(vShortKeys.currentPresses);
@@ -57,17 +58,20 @@ const vShortKeys = {
         }
         console.timeEnd('shortCutFunction');
     },
-    init : async (shortKeys) => {
+
+    init: async (shortKeys) => {
         vShortKeys.scArray = shortKeys;
-    
+
         window.addEventListener("keydown", vShortKeys.keyDown);
         window.addEventListener("keyup", vShortKeys.keyUp);
         window.addEventListener('blur', vShortKeys.stop);
         window.addEventListener('focus', vShortKeys.start);
-        
+
         vShortKeys.start();
     }
+
 };
+
 
 
 module.exports = vShortKeys;
