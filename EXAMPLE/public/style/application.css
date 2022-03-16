@@ -39,29 +39,22 @@ body {
 
 
 .singleShotCode {
-    background: #505050;
-    padding: 5px 10px;
-    color: white;
-    position: relative;
-    margin: 5px 0px;
 }
 
 .singleShotCode p {
     margin: 0;
-    line-height: 1.75em;
-    padding-left: 20px;
+    line-height: 1.45em;
 }
 
-.singleShotCode p.description {
+.singleShotCode .description {
     margin: 0;
     line-height: 1.75em;
-    padding-left: 20px;
+    padding: 0 1em;
+    box-shadow: 0 10px 25px -10px #1e1e1e;
+    border: 1px solid #444444;
 }
 
 .singleShotCode p .number {
-    position: absolute;
-    left: 10px;
-    top: 5px;
     color: orange;
 }
 
@@ -142,4 +135,40 @@ body {
     bottom: -10vw;
     left: -5vw;
     z-index: 0;
+}
+
+
+.description p {
+    padding: 0;
+}
+
+.singleShotCode .description h4, .singleShotCode .description p {
+    margin: 5px 0;
+}
+
+.docs {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.singleShotCode > * {
+    padding: .25em 1em;
+}
+
+.singleShotCode {
+    border: 1px solid #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 20px -10px #404040;
+    background: #525252;
+}
+
+.singleShotCode .description {
+    margin: 1em;
+}
+
+.singleShotCode p {
+    margin: 0;
+    line-height: 1.45em;
 }

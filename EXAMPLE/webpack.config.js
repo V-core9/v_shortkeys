@@ -3,12 +3,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        game: path.join(__dirname, 'source/vShortKeys.js'),
+        vShortKeys: path.join(__dirname, 'source/appExample.js'),
     },
     mode: "development",
     target: 'web',
     output: {
-        filename: `vShortKeys.js`,
+        filename: `[name].js`,
         path: path.resolve(__dirname, `public/scripts`),
     },
 };
