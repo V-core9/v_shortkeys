@@ -28,7 +28,6 @@ module.exports = function vShortKeys(data = {}) {
 
   //? Main Looping Function
   this.loop = () => {
-    //console.time('shortCutFunction');
     if (this.currentPresses.length > 0) {
       log(this.currentPresses);
       var i, j;
@@ -54,7 +53,7 @@ module.exports = function vShortKeys(data = {}) {
         }
       }
     }
-    //console.timeEnd('shortCutFunction');
+
   };
 
   this.findByName = (name) => {
@@ -144,7 +143,6 @@ module.exports = function vShortKeys(data = {}) {
       } else {
         throw new Error('Debug Value must be a boolean');
       }
-      return this;
     } catch (e) {
       return e;
     }
