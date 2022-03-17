@@ -67,23 +67,29 @@ module.exports = function vShortKeys(data = {}) {
         //console.timeEnd('shortCutFunction');
     };
 
+    this.findByName = (name) => {
+        for (var i = 0; i < this.shortKeys.length; i++) {
+            if (this.shortKeys[i].name == name) return this.shortKeys[i];
+        }
+        return null;
+    };
 
     //? Enable/Disable Shortcut
     this.enableShortcut = (name) => {
-        for (var i = 0; i < this.shortKeys.length; i++) {
-            if (this.shortKeys[i].name == name) {
-                this.shortKeys[i].disabled = false;
-                console.log(`🟢 Shortcut Enabled : ${name}`);
-            }
+        try {
+            this.findByName(name).disabled = false;
+            console.log(`🟢 Shortcut Enabled : ${name}`);
+        } catch (err) {
+            return err;
         }
     };
 
     this.disableShortcut = (name) => {
-        for (var i = 0; i < this.shortKeys.length; i++) {
-            if (this.shortKeys[i].name == name) {
-                this.shortKeys[i].disabled = true;
-                console.log(`🚫 Shortcut Disabled : ${name}`);
-            }
+        try {
+            this.findByName(name).disabled = true;
+            console.log(`🚫 Shortcut Disabled : ${name}`);
+        } catch (err) {
+            return err;
         }
     };
 
