@@ -1,165 +1,177 @@
 function vShortKeyItem(name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) {
-    this.name = name;
-    this.description = description;
-    this.buttons = buttons;
-    this.exec = exec;
-    this.autoTrigger = autoTrigger;
-    this.coolDown = coolDown;
-    this.date = Date.now();
-    this.triggered = false;
-    this.disabled = false;
+  this.name = name;
+  this.description = description;
+  this.buttons = buttons;
+  this.exec = exec;
+  this.autoTrigger = autoTrigger;
+  this.coolDown = coolDown;
+  this.date = Date.now();
+  this.triggered = false;
+  this.disabled = false;
 }
 
 module.exports = function vShortKeys(data = {}) {
-    this.debug = false;
-    this.shortKeys = data.shortKeys || [];
-    this.currentPresses = [];
+  this.debug = false;
+  this.shortKeys = data.shortKeys || [];
+  this.currentPresses = [];
+  this.intervalObject = null;
+
+  this.options = {
+    loopInterval: (1000 / 60), // loop interval in milliseconds
+  };
+
+
+  //? Start and stop methods.
+  this.start = () => {
+    this.intervalObject = setInterval(this.loop, this.options.loopInterval);
+  };
+
+  this.stop = () => {
+    clearInterval(this.intervalObject);
     this.intervalObject = null;
-
-    this.options = {
-        loopInterval: (1000 / 60), // loop interval in milliseconds
-    };
+    this.currentPresses = [];
+  };
 
 
-    //? Start and stop methods.
-    this.start = () => {
-        this.intervalObject = setInterval(this.loop, this.options.loopInterval);
-    };
-
-    this.stop = () => {
-        clearInterval(this.intervalObject);
-        this.intervalObject = null;
-        this.currentPresses = [];
-    };
-
-
-    //? Main Looping Function
-    this.loop = () => {
-        //console.time('shortCutFunction');
-        if (this.currentPresses.length > 0) {
-            console.log(this.currentPresses);
-            var i, j;
-            for (i = 0; i < this.shortKeys.length; i++) {
-                if (this.shortKeys[i].disabled !== true) {
-                    var btnNum = this.shortKeys[i].buttons.length;
-                    for (j = 0; j < this.shortKeys[i].buttons.length; j++) {
-                        if (this.currentPresses.indexOf(this.shortKeys[i].buttons[j]) > -1) {
-                            btnNum--;
-                        }
-                    }
-                    if (btnNum == 0) {
-                        var timeDelta = Date.now() - this.shortKeys[i].date;
-                        if (((this.shortKeys[i].triggered == false) || (timeDelta > this.shortKeys[i].autoTrigger)) && (timeDelta > this.shortKeys[i].coolDown)) {
-                            this.shortKeys[i].exec();
-                            this.shortKeys[i].date = Date.now();
-                            this.shortKeys[i].triggered = true;
-                            console.warn(`Triggered : ${this.shortKeys[i].name}`);
-                        }
-                    } else {
-                        if (this.shortKeys[i].triggered) {
-                            this.shortKeys[i].triggered = false;
-                            console.warn(`UN-Triggered : ${this.shortKeys[i].name}`);
-                        }
-                    }
-                }
+  //? Main Looping Function
+  this.loop = () => {
+    //console.time('shortCutFunction');
+    if (this.currentPresses.length > 0) {
+      //console.log(this.currentPresses);
+      var i, j;
+      for (i = 0; i < this.shortKeys.length; i++) {
+        if (this.shortKeys[i].disabled !== true) {
+          var btnNum = this.shortKeys[i].buttons.length;
+          for (j = 0; j < this.shortKeys[i].buttons.length; j++) {
+            if (this.currentPresses.indexOf(this.shortKeys[i].buttons[j]) > -1) {
+              btnNum--;
             }
-        }
-        //console.timeEnd('shortCutFunction');
-    };
-
-    this.findByName = (name) => {
-        for (var i = 0; i < this.shortKeys.length; i++) {
-            if (this.shortKeys[i].name == name) return this.shortKeys[i];
-        }
-        return null;
-    };
-
-    //? Enable/Disable Shortcut
-    this.enableShortcut = (name) => {
-        try {
-            this.findByName(name).disabled = false;
-            console.log(`🟢 Shortcut Enabled : ${name}`);
-        } catch (err) {
-            return err;
-        }
-    };
-
-    this.disableShortcut = (name) => {
-        try {
-            this.findByName(name).disabled = true;
-            console.log(`🚫 Shortcut Disabled : ${name}`);
-        } catch (err) {
-            return err;
-        }
-    };
-
-    this.registerShortcut = (name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) => {
-        var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
-        this.shortKeys.push(newItem);
-        console.log(`📃 Shortcut Registered : ${name}`);
-    };
-
-
-    //? Event Handlers [ KeyDown, KeyUp ]
-    this.keyDown = (event) => {
-        var key = event.keyCode;
-        if (!this.currentPresses.includes(key)) {
-            this.currentPresses.push(key);
-        }
-    };
-
-    this.keyUp = (ev) => {
-        var key = ev.keyCode;
-        var index = this.currentPresses.indexOf(key);
-        if (index > -1) {
-            this.currentPresses.splice(index, 1);
-        }
-    };
-
-
-    //* Setting up options
-    this.setLoopInterval = (interval) => {
-        try {
-            console.info(`Setting LoopInterval Value to ${interval}`);
-            this.options.loopInterval = interval;
-            return this;
-        } catch (e) {
-            return e;
-        }
-    };
-
-    this.setDebug = (debug) => {
-        try {
-            console.info(`Setting Debug Value to ${debug}`);
-            if (typeof debug === 'boolean') {
-                this.debug = debug;
-            } else {
-                throw new Error('Debug Value must be a boolean');
+          }
+          if (btnNum == 0) {
+            var timeDelta = Date.now() - this.shortKeys[i].date;
+            if (((this.shortKeys[i].triggered == false) || (timeDelta > this.shortKeys[i].autoTrigger)) && (timeDelta > this.shortKeys[i].coolDown)) {
+              this.shortKeys[i].exec();
+              this.shortKeys[i].date = Date.now();
+              this.shortKeys[i].triggered = true;
+              console.warn(`Triggered : ${this.shortKeys[i].name}`);
             }
-            return this;
-        } catch (e) {
-            return e;
+          } else {
+            if (this.shortKeys[i].triggered) this.shortKeys[i].triggered = false;
+          }
         }
-    };
+      }
+    }
+    //console.timeEnd('shortCutFunction');
+  };
 
-    this.setOptions = (options) => {
-        console.info(`📐 Setting Options`);
-        if (options.loopInterval !== undefined) this.setLoopInterval(options.loopInterval);
-        if (options.debug !== undefined) this.setDebug(options.debug);
-    };
+  this.findByName = (name) => {
+    for (var i = 0; i < this.shortKeys.length; i++) {
+      if (this.shortKeys[i].name == name) return this.shortKeys[i];
+    }
+    return null;
+  };
+
+  //? Enable/Disable Shortcut
+  this.enableShortcut = (name) => {
+    try {
+      var item = this.findByName(name);
+      if (item.disabled !== true) {
+        console.log(`🧯 Failed : Shortcut is already enabled [${name}]`);
+        return false;
+      } else {
+        item.disabled = false;
+        console.log(`🟢 Shortcut Enabled : ${name}`);
+        return true;
+      }
+    } catch (err) {
+      return err;
+    }
+  };
+
+  this.disableShortcut = (name) => {
+    try {
+      var item = this.findByName(name);
+      if (item.disabled) {
+        console.log(`🧯 Failed : Shortcut is already disabled [${name}]`);
+        return false;
+      } else {
+        this.findByName(name).disabled = true;
+        console.log(`🛑 Disabled Shortcut : ${name}`);
+        return true;
+      }
+    } catch (err) {
+      return err;
+    }
+  };
+
+  //? Method to register new Shortcuts
+  this.registerShortcut = (name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) => {
+    var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
+    this.shortKeys.push(newItem);
+    console.log(`📃 Shortcut Registered : ${name}`);
+  };
 
 
-    this.setEventListeners = () => {
-        window.addEventListener("keydown", this.keyDown);
-        window.addEventListener("keyup", this.keyUp);
-        window.addEventListener('blur', this.stop);
-        window.addEventListener('focus', this.start);
-        return this;
-    };
+  //? Event Handlers [ KeyDown, KeyUp ]
+  this.keyDown = (event) => {
+    var key = event.keyCode;
+    if (!this.currentPresses.includes(key)) {
+      this.currentPresses.push(key);
+    }
+  };
 
-    if (data.options !== undefined) this.setOptions(data.options);
+  this.keyUp = (ev) => {
+    var key = ev.keyCode;
+    var index = this.currentPresses.indexOf(key);
+    if (index > -1) {
+      this.currentPresses.splice(index, 1);
+    }
+  };
 
-    this.setEventListeners();
-    this.start();
+
+  //* Setting up options
+  this.setLoopInterval = (interval) => {
+    try {
+      console.info(`Setting LoopInterval Value to ${interval}`);
+      this.options.loopInterval = interval;
+      return this;
+    } catch (e) {
+      return e;
+    }
+  };
+
+  this.setDebug = (debug) => {
+    try {
+      console.info(`Setting Debug Value to ${debug}`);
+      if (typeof debug === 'boolean') {
+        this.debug = debug;
+      } else {
+        throw new Error('Debug Value must be a boolean');
+      }
+      return this;
+    } catch (e) {
+      return e;
+    }
+  };
+
+  this.setOptions = (options) => {
+    console.info(`📐 Setting Options`);
+    if (options.loopInterval !== undefined) this.setLoopInterval(options.loopInterval);
+    if (options.debug !== undefined) this.setDebug(options.debug);
+  };
+
+
+  this.setEventListeners = () => {
+    window.addEventListener("keydown", this.keyDown);
+    window.addEventListener("keyup", this.keyUp);
+    window.addEventListener('blur', this.stop);
+    window.addEventListener('focus', this.start);
+    return this;
+  };
+
+  if (data.options !== undefined) this.setOptions(data.options);
+
+  this.setEventListeners();
+  this.start();
 };
 
