@@ -3,10 +3,7 @@ const { closeWindowFunc, fullScreen, toggleRootModal, messageConsoleDemo, clearC
 
 
 //?- - - - - - - - - - -
-//? Load the thing.
 const vShortKeys = require('../../');
-
-//? Create an instance of it.
 var vsk = new vShortKeys();
 
 // vsk.setDebug(true);
@@ -30,10 +27,6 @@ vsk.disableShortcut("closeWindow");
 //!---------------------------------------------
 
 
-
-
-
-
 console.log(vsk);
 console.table(vsk.shortKeys);
 
@@ -41,7 +34,6 @@ console.table(vsk.shortKeys);
 var skList = vsk.shortKeys;
 
 var stringShortKeys = '<h4>Shortcodes:</h4>';
-
 for (let i = 0; i < skList.length; i++) {
   stringShortKeys += `
                         <div class="singleShotCode">
@@ -57,5 +49,4 @@ for (let i = 0; i < skList.length; i++) {
                         </div>
                         `;
 }
-
 document.querySelector('.docs').innerHTML = stringShortKeys;
