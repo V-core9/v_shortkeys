@@ -6,23 +6,32 @@ const { closeWindowFunc, fullScreen, toggleRootModal, messageConsoleDemo, clearC
 const vShortKeys = require('../../');
 var vsk = new vShortKeys();
 
-// vsk.setDebug(true);
+vsk.setOption({ interval: 100 });
 
-//? Register few shortcuts.
 //* vShortKeys.registerShortcut(name, buttons, callback, description, autoTrigger, coolDown)
+//? Super basic example:
+vsk.registerShortcut("number1", [49], () => console.log('YEA Demo Button 1'));
+
+//? Register few shortcuts:
 vsk.registerShortcut("clearConsole", [67, 83], clearConsole, "[c + s] \n Will clear the console messages.", 500, 1000);
 vsk.registerShortcut("rootModal", [77, 79, 68], toggleRootModal, "[m + o + d] \n Random demo modal pops up.", 2000, 1000);
 vsk.registerShortcut("fullScreen.toggle", [18, 13], fullScreen.toggle, "[alt + enter] \n Toggler for the fullscreen mode.", 1000, 0);
 vsk.registerShortcut("console.log", [81, 87, 69], messageConsoleDemo, "[q + w + e] \n This will send console log message.", 250, 1000);
 
-vsk.registerShortcut("number1", [49], () => console.log('YEA Demo Button 1'));
+//? Enable and Disable "rootModal" Shortcut using 2 other.
 vsk.registerShortcut("enableRootModal", [69, 82, 77], () => vsk.enableShortcut("rootModal"), "[e + r + m] \n Enable Root Modal Shortcut.", 1000, 0);
 vsk.registerShortcut("disableRootModal", [68, 82, 77], () => vsk.disableShortcut("rootModal"), "[d + r + m] \n Disable Root Modal Shortcut.", 1000, 0);
 
+//? Probably will not work cuz it needs to open that window before chrome allows you to close it.
 vsk.registerShortcut("closeWindow", [18, 67], closeWindowFunc, "[alt + c] \n Will try to close the window. NOTE:Disabled so we dont press it at random.", 0, 0);
 vsk.registerShortcut("reEnableCloseWindow", [69, 67, 87], () => vsk.enableShortcut("closeWindow"), "[w + e + c] \n Re-Enable [closeWindow] Shortcut .", 1000, 0);
 
-//? Disable the one that can close the tab.
+//? Enable and Disable debug logging using the shortcuts
+vsk.registerShortcut("enableDebugLogging", [68, 66, 71], ()=>vsk.setOption({ debug: true }), "[d + b + g] \n Enable debug logging", 1000, 0);
+vsk.registerShortcut("disableDebugLogging", [71, 66, 72], ()=>vsk.setOption({ debug: false }), "[h + b + g] \n Disable debug logging", 1000, 0);
+
+
+//? Disable the one that can close the tab. [init demo]
 vsk.disableShortcut("closeWindow");
 //!---------------------------------------------
 
