@@ -1,6 +1,6 @@
 {
   "name": "v_shortkeys",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Simple Shortcut Handler with auto[re]triggering time, cooldown time, and more.",
   "main": "index.js",
   "scripts": {
