@@ -1,8 +1,7 @@
-const debuggerX = require('./debug');
-
-const { log, warn, info } = debuggerX;
-
 const vShortKeyItem = require('./shortcut-item-class');
+
+const dbg = require('./debug');
+const { log, warn, info } = dbg;
 
 module.exports = function vShortKeys(data = {}) {
   this.shortKeys = data.shortKeys || [];
@@ -12,7 +11,6 @@ module.exports = function vShortKeys(data = {}) {
   this.options = {
     loopInterval: (1000 / 60), // loop interval in milliseconds
   };
-
 
   //? Start and stop methods.
   this.start = () => {
@@ -24,7 +22,6 @@ module.exports = function vShortKeys(data = {}) {
     this.intervalObject = null;
     this.currentPresses = [];
   };
-
 
   //? Main Looping Function
   this.loop = () => {
@@ -103,7 +100,6 @@ module.exports = function vShortKeys(data = {}) {
     log(`📃 Shortcut Registered : ${name}`);
   };
 
-
   //? Event Handlers [ KeyDown, KeyUp ]
   this.keyDown = (event) => {
     var key = event.keyCode;
@@ -120,38 +116,23 @@ module.exports = function vShortKeys(data = {}) {
     }
   };
 
-
-  //* Setting up options
   this.setLoopInterval = (interval) => {
     try {
       info(`Setting LoopInterval Value to ${interval}`);
       this.options.loopInterval = interval;
       this.stop();
       this.start();
-      return this;
-    } catch (e) {
-      return e;
-    }
-  };
-
-  this.setDebug = (value) => {
-    try {
-      if (typeof value === 'boolean') {
-        debuggerX.debug = value;
-        info(`Setting Debug Value to ${value}`);
-        return this;
-      } else {
-        throw new Error('Debug Value must be a boolean');
-      }
-    } catch (e) {
-      return e;
+      return true;
+    } catch (err) {
+      warn(err);
+      return false;
     }
   };
 
   this.setOption = (options = {}) => {
     info(`📐 Setting Options`);
+    if (options.debug !== undefined) dbg.debug = options.debug;
     if (options.interval !== undefined) this.setLoopInterval(options.interval);
-    if (options.debug !== undefined) this.setDebug(options.debug);
   };
 
 
@@ -163,6 +144,7 @@ module.exports = function vShortKeys(data = {}) {
     return this;
   };
 
+  //* In case some options have been passed in.
   if (data.options !== undefined) this.setOption(data.options);
 
   this.setEventListeners();
