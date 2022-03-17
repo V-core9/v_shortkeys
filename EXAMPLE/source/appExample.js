@@ -6,7 +6,10 @@ const { closeWindowFunc, fullScreen, toggleRootModal, messageConsoleDemo, clearC
 const vShortKeys = require('../../');
 var vsk = new vShortKeys();
 
-vsk.setOption({ interval: 100 });
+vsk.setOption({ debug: true, interval: 250 });
+
+vsk.setOption({ interval: (1000 / 60) });
+vsk.setOption({ debug: false });
 
 //* vShortKeys.registerShortcut(name, buttons, callback, description, autoTrigger, coolDown)
 //? Super basic example:
@@ -27,8 +30,8 @@ vsk.registerShortcut("closeWindow", [18, 67], closeWindowFunc, "[alt + c] \n Wil
 vsk.registerShortcut("reEnableCloseWindow", [69, 67, 87], () => vsk.enableShortcut("closeWindow"), "[w + e + c] \n Re-Enable [closeWindow] Shortcut .", 1000, 0);
 
 //? Enable and Disable debug logging using the shortcuts
-vsk.registerShortcut("enableDebugLogging", [68, 66, 71], ()=>vsk.setOption({ debug: true }), "[d + b + g] \n Enable debug logging", 1000, 0);
-vsk.registerShortcut("disableDebugLogging", [71, 66, 72], ()=>vsk.setOption({ debug: false }), "[h + b + g] \n Disable debug logging", 1000, 0);
+vsk.registerShortcut("enableDebugLogging", [68, 66, 71], () => vsk.setOption({ debug: true }), "[d + b + g] \n Enable debug logging", 1000, 0);
+vsk.registerShortcut("disableDebugLogging", [71, 66, 72], () => vsk.setOption({ debug: false }), "[h + b + g] \n Disable debug logging", 1000, 0);
 
 
 //? Disable the one that can close the tab. [init demo]
