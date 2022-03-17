@@ -46,7 +46,7 @@ console.table(vsk.shortKeys);
 
 var skList = vsk.shortKeys;
 
-var stringShortKeys = '<h4>Shortcodes:</h4>';
+var stringShortKeys = '';
 for (let i = 0; i < skList.length; i++) {
   stringShortKeys += `
                         <div class="singleShotCode">

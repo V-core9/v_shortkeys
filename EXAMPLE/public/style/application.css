@@ -51,7 +51,7 @@ body {
     line-height: 1.75em;
     padding: 0 1em;
     box-shadow: 0 10px 25px -10px #1e1e1e;
-    border: 1px solid #444444;
+    /* border: 1px solid #444444; */
 }
 
 .singleShotCode p .number {
@@ -144,16 +144,20 @@ body {
 
 .singleShotCode .description h4, .singleShotCode .description p {
     margin: 5px 0;
+    padding: .15em 1em;
 }
 
 .docs {
     display: flex;
-    flex-direction: column;
+    flex-direction: revert;
     gap: 1em;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    justify-content: center;
 }
 
 .singleShotCode > * {
-    padding: .25em 1em;
+    padding: .15em 1em;
 }
 
 .singleShotCode {
@@ -162,13 +166,31 @@ body {
     flex-direction: column;
     box-shadow: 0 10px 20px -10px #404040;
     background: #525252;
+    max-width: 320px;
+    width: 100%;
 }
 
 .singleShotCode .description {
-    margin: 1em;
+    flex: 1;
+    padding: 0;
 }
 
 .singleShotCode p {
     margin: 0;
     line-height: 1.45em;
+}
+
+.singleShotCode .description h4 {
+    background: #444444;
+    margin: 0;
+    padding: 0.15em 1em;
+    border-top: 1px solid #1d1d1d;
+}
+
+p.name {
+    font-size: 1.1em;
+    font-weight: bold;
+    background: #343434;
+    padding: 0.25em 1em;
+    text-shadow: 0 0 5px black;
 }
