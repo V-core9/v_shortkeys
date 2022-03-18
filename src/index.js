@@ -7,14 +7,11 @@ module.exports = function vShortKeys(data = {}) {
   this.shortKeys = data.shortKeys || [];
   this.currentPresses = [];
   this.intervalObject = null;
-
-  this.options = {
-    loopInterval: (1000 / 60), // loop interval in milliseconds
-  };
+  this.loopInterval = (1000 / 60); // loop interval in milliseconds
 
   //? Start and stop methods.
   this.start = () => {
-    this.intervalObject = setInterval(this.loop, this.options.loopInterval);
+    this.intervalObject = setInterval(this.loop, this.loopInterval);
   };
 
   this.stop = () => {
@@ -93,12 +90,29 @@ module.exports = function vShortKeys(data = {}) {
     }
   };
 
-  //? Method to register new Shortcuts
+
+  //? Method to [un]register new Shortcuts
   this.registerShortcut = (name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) => {
-    var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
-    this.shortKeys.push(newItem);
-    log(`📃 Shortcut Registered : ${name}`);
+    var item = this.findByName(name);
+    if (item === null) {
+      var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
+      this.shortKeys.push(newItem);
+      info(`✅ Shortcut Registered : ${name}`);
+    } else {
+      return warn(`❌ Shortcut Already Registered : ${name}`);
+    }
   };
+
+  this.unregisterShortcut = (name) => {
+    var item = this.findByName(name);
+    if (item) {
+      this.shortKeys.splice(this.shortKeys.indexOf(item), 1);
+      info(`🧨 Shortcut Unregistered : ${name}`);
+    } else {
+      warn(`❌ Failed : Shortcut not found [${name}]`);
+    }
+  };
+
 
   //? Event Handlers [ KeyDown, KeyUp ]
   this.keyDown = (event) => {
@@ -116,19 +130,21 @@ module.exports = function vShortKeys(data = {}) {
     }
   };
 
+
+  //? Handle setting different interval
   this.setLoopInterval = (interval) => {
     try {
       info(`Setting LoopInterval Value to ${interval}`);
-      this.options.loopInterval = interval;
+      this.loopInterval = interval;
       this.stop();
       this.start();
-      return true;
+      return this;
     } catch (err) {
-      warn(err);
-      return false;
+      return (err);
     }
   };
 
+  //? Method to set option[s]
   this.setOption = (options = {}) => {
     info(`📐 Setting Options`);
     if (options.debug !== undefined) dbg.debug = options.debug;

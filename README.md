@@ -2,9 +2,7 @@
 
 Simple way to have Keyboard Shortcuts with auto-triggering, cooldown times, and more.
 
-## ALPHA VERSION : 004 ;
-
-## ! NOT READY FOR USE !
+## ALPHA VERSION : NOT READY FOR USE !
 
 #
 
@@ -17,7 +15,10 @@ Simple way to have Keyboard Shortcuts with auto-triggering, cooldown times, and 
     const vShortKeys = require('v_shortkeys');
     var vsk = new vShortKeys();
 
-    vsk.registerShortcut("number1", [49], () => console.log('YEA Demo Button 1'));
+    vsk.registerShortcut("number1", [49], () => console.log('YEA Demo Button 1')); //-> Registers new keyCombo
+    vsk.disableShortcut("number1"); //-> Sets disabled status to TRUE
+    vsk.enableShortcut("number1");  //-> ReEnables it by setting it now to FALSE
+    vsk.unregisterShortcut("number1");  //-> Unregister that shortcut, remove this to keep it working.
 
 This will execute passed function when user presses key 49 which is actually "Number 1" key.
 
@@ -42,6 +43,12 @@ This will execute passed function when user presses key 49 which is actually "Nu
 > - autoTrigger : Number / ms to wait before re-triggering
 > - coolDown : Number / ms to wait before being able to trigger it again
 
+#### 🔻 **Unregister Shortcut**
+
+- _Will Remove shortcut/key-combo from the list. Uses name to find it_
+
+      vsk.unregisterShortcut( name );
+
 #### 🚫 **Disable Item**
 
 - _Will Disable a shortcut/key-combo by Name as String._
@@ -59,9 +66,9 @@ This will execute passed function when user presses key 49 which is actually "Nu
 - _Set the loop interval time in milliseconds as number._
 
       // Default: (1000 ms / 60) => 60hz
-      vsk.setOption({ interval : 10 });
+      vsk.setOption({ interval : (1000 ms / 60) });
 
-#### 🌀 **Enable Debug Logging**
+#### 🌀 **Enable/Disable Debug Logging**
 
 - _Enable logging to console for debug._
 
@@ -82,6 +89,11 @@ This will execute passed function when user presses key 49 which is actually "Nu
     vsk.registerShortcut("rootModal", [77, 79, 68], toggleRootModal, "[m + o + d] \n Random demo modal pops up.", 2000, 1000);
     vsk.registerShortcut("fullScreen.toggle", [18, 13], fullScreen.toggle, "[alt + enter] \n Toggler for the fullscreen mode.", 1000, 0);
     vsk.registerShortcut("console.log", [81, 87, 69], messageConsoleDemo, "[q + w + e] \n This will send console log message.", 250, 1000);
+
+    vsk.unregisterShortcut("clearConsole");
+    vsk.disableShortcut("rootModal");
+
+    // Check the ./EXAMPLE/source/appExample.js for more ways to configure and init
 
 Additional Screenshot From The Example:
 ![Example Running these from the Folder ./EXAMPLE/ ](./EXAMPLE/public/images/demo01.png)
