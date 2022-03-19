@@ -28,8 +28,9 @@ var sampleKeyList = [
     buttons: [67, 83],
     callback: clearConsole,
     description: "Will clear the console messages.",
-    autoTrigger: 500,
-    coolDown: 1000
+    autoTrigger: 5000,
+    coolDown: 10000,
+    delay: 2000
   },
   {
     name: "rootModal",
@@ -37,7 +38,8 @@ var sampleKeyList = [
     callback: toggleRootModal,
     description: "Random demo modal pops up.",
     autoTrigger: 2000,
-    coolDown: 1000
+    coolDown: 1000,
+    delay: 2000
   },
   {
     name: "fullScreen.toggle",
@@ -45,7 +47,8 @@ var sampleKeyList = [
     callback: fullScreen.toggle,
     description: "Toggler for the fullscreen mode.",
     autoTrigger: 1000,
-    coolDown: 0
+    coolDown: 0,
+    delay: 2000
   },
   {
     name: "console.log",
@@ -53,10 +56,11 @@ var sampleKeyList = [
     callback: messageConsoleDemo,
     description: "This will send console log message.",
     autoTrigger: 250,
-    coolDown: 1000
+    coolDown: 1000,
+    delay: 2000
   },
 ];
-sampleKeyList.map(item => vsk.registerShortcut(item.name, item.buttons, item.callback, item.description, item.autoTrigger, item.coolDown));
+sampleKeyList.map(item => vsk.registerShortcut(item.name, item.buttons, item.callback, item.description, item.autoTrigger, item.coolDown, item.delay));
 
 //? Enable and Disable "rootModal" Shortcut using 2 other.
 vsk.registerShortcut("enableRootModal", [69, 82, 77], () => vsk.enableShortcut("rootModal"), "Enable [RootModal] Shortcut.", 1000, 0);
@@ -95,7 +99,8 @@ for (let i = 0; i < skList.length; i++) {
                             <p class="name"><span class="number">${i + 1}. ${skList[i].name}()</span></p>
                             <p>🎹 Keys : ${JSON.stringify(skList[i].buttons.map(item => String.fromCharCode(item)))}</p>
                             <p class="delay">⏳ CoolDown: ${skList[i].coolDown}ms</p>
-                            <p class="delay">🔃 AutoTrigger: ${skList[i].autoTrigger}ms</p>
+                            <p class="delay">🔃 Auto Trigger: ${skList[i].autoTrigger}ms</p>
+                            <p class="delay">🚆 Delay/Cast Time: ${skList[i].delay}ms</p>
                             ${(skList[i].disabled == true) ? '<p style="color:red;">Disabled</p>' : ''}
                             <div class="description">
                                 <h4>Description:</h4>

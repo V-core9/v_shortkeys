@@ -35,10 +35,10 @@ module.exports = function vShortKeys(data = {}) {
           }
           if (btnNum == 0) {
             var timeDelta = Date.now() - this.shortKeys[i].date;
-            if (((this.shortKeys[i].triggered == false) || (timeDelta > this.shortKeys[i].autoTrigger)) && (timeDelta > this.shortKeys[i].coolDown)) {
-              this.shortKeys[i].exec();
+            if (((this.shortKeys[i].triggered == false) || (timeDelta > this.shortKeys[i].autoTrigger)) && (timeDelta > this.shortKeys[i].coolDown + this.shortKeys[i].delay)) {
               this.shortKeys[i].date = Date.now();
               this.shortKeys[i].triggered = true;
+              this.shortKeys[i].callback();
               warn(`Triggered : ${this.shortKeys[i].name}`);
             }
           } else {
@@ -92,10 +92,10 @@ module.exports = function vShortKeys(data = {}) {
 
 
   //? Method to [un]register new Shortcuts
-  this.registerShortcut = (name, buttons, exec, description = "", autoTrigger = 0, coolDown = 0) => {
+  this.registerShortcut = (name, buttons, callback, description = "", autoTrigger = 0, coolDown = 0, delay = 0) => {
     var item = this.findByName(name);
     if (item === null) {
-      var newItem = new vShortKeyItem(name, buttons, exec, description, autoTrigger, coolDown);
+      var newItem = new vShortKeyItem(name, buttons, callback, description, autoTrigger, coolDown, delay);
       this.shortKeys.push(newItem);
       info(`✅ Shortcut Registered : ${name}`);
     } else {
